@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f619d254574299468aed88426fadc53, type: 3}
+  m_Name: wordSelection_ScriptableObject
+  m_EditorClassIdentifier: 
+  _gridScriptableObject: {fileID: 11400000, guid: d74e72434df733743b227a7f1d86066d, type: 2}
+  _color:
+  - {r: 0.38823533, g: 0.53333336, b: 0.81568635, a: 1}
+  - {r: 0.121568635, g: 0.654902, b: 0.70980394, a: 1}
+  - {r: 0.7137255, g: 0.40784317, b: 0.7137255, a: 1}
+  - {r: 0.5686275, g: 0.45882356, b: 0.8235295, a: 1}
