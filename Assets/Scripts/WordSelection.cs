@@ -7,7 +7,8 @@ using UnityEngine;
 [CreateAssetMenu]
 public class WordSelection : ScriptableObject
 {
-    private CellPosition startPoint, endPoint;
+    private int _xStartPosition, _yStartPosition;
+    private int _xEndPosition, _yEndPosition;
     private string CurrentWord = "";
     [SerializeField] WordsearchGrid_ScriptableObject _gridScriptableObject;
     [SerializeField] Color[] _color = new Color[4];
@@ -15,11 +16,13 @@ public class WordSelection : ScriptableObject
 
     public void SetStartPoint(CellPosition point)
     {
-        startPoint = point;
+        _xStartPosition = point.GetPositionX();
+        _yStartPosition = point.GetPositionY();
     }
     public void SetEndPoint(CellPosition point)
     {
-        endPoint = point;
+        _xEndPosition = point.GetPositionX();
+        _yEndPosition = point.GetPositionY();
         CheckPosibleSelectedWord();
 
     }
@@ -29,18 +32,19 @@ public class WordSelection : ScriptableObject
     }
     public void Reset()
     {
-        startPoint = null;
-        endPoint = null;
+        _xEndPosition = 0;
+        _yEndPosition = 0;
+        _xStartPosition= 0;
+        _yStartPosition= 0;
         CurrentWord = "";
     }
     private void CheckPosibleSelectedWord()
     {
-        if (startPoint == null) return;
-        if (startPoint.GetPositionX() == endPoint.GetPositionX())
+        if (_xStartPosition == _xEndPosition)
         {
             CheckYAxis();
         }
-        else if (startPoint.GetPositionY() == endPoint.GetPositionY())
+        else if (_yStartPosition == _yEndPosition)
         {
             
             CheckXAxis();
@@ -50,29 +54,56 @@ public class WordSelection : ScriptableObject
     }
     private void CheckXAxis()
     {
-        int _yAxis = startPoint.GetPositionY();
-        for (int i = startPoint.GetPositionX(); i <= endPoint.GetPositionX(); i++)
+
+        if(_xStartPosition <  _xEndPosition)
         {
-            CellPosition[][] _grid = _gridScriptableObject.GetGrid();
-            CurrentWord += _grid[_yAxis][i].GetLetter();
+            for (int i = _xStartPosition; i <= _xEndPosition; i++)
+            {
+                CellPosition[][] _grid = _gridScriptableObject.GetGrid();
+                CurrentWord += _grid[_yStartPosition][i].GetLetter();
+            }
         }
+        else
+        {
+            for (int i = _xStartPosition; i >= _xEndPosition; i--)
+            {
+                CellPosition[][] _grid = _gridScriptableObject.GetGrid();
+                CurrentWord += _grid[_yStartPosition][i].GetLetter();
+                Debug.Log(CurrentWord);
+            }
+        }
+        
         if (_gridScriptableObject.CheckWordsListWithWordObtained(CurrentWord))
         {
-            Debug.Log(CurrentWord);
+            
             HighlightWordXAxis();
         }
     }
     private void CheckYAxis()
     {
-        int _xAxis = startPoint.GetPositionX();
-        for (int i = startPoint.GetPositionY(); i <= endPoint.GetPositionY(); i++)
+
+        if (_yStartPosition < _yEndPosition)
         {
-            CellPosition[][] _grid = _gridScriptableObject.GetGrid();
-            CurrentWord += _grid[i][_xAxis].GetLetter();
+            for (int i = _yStartPosition; i <= _yEndPosition; i++)
+            {
+                CellPosition[][] _grid = _gridScriptableObject.GetGrid();
+                CurrentWord += _grid[i][_xStartPosition].GetLetter();
+                
+            }
         }
+        else
+        {
+            for (int i = _yStartPosition; i >= _yEndPosition; i--)
+            {
+                CellPosition[][] _grid = _gridScriptableObject.GetGrid();
+                CurrentWord += _grid[i][_xStartPosition].GetLetter();
+                Debug.Log(CurrentWord);
+            }
+        }
+        Debug.Log(CurrentWord);
         if (_gridScriptableObject.CheckWordsListWithWordObtained(CurrentWord))
         {
-            Debug.Log(CurrentWord);
+            
             HighlightWordYAxys();
         }
         
@@ -80,21 +111,32 @@ public class WordSelection : ScriptableObject
     private void HighlightWordYAxys()
     {
         int random = GetRandomInt();
-        int _xAxis = startPoint.GetPositionX();
-        for (int i = startPoint.GetPositionY(); i <= endPoint.GetPositionY(); i++)
+
+        for (int i = _yStartPosition; i <= _yEndPosition; i++)
         {
             CellPosition[][] _grid = _gridScriptableObject.GetGrid();
-            _grid[i][_xAxis].SetColor(GetRandomColor(random));
+            _grid[i][_xStartPosition].SetColor(GetRandomColor(random));
         }
+        for (int i = _yStartPosition; i >= _yEndPosition; i--)
+        {
+            CellPosition[][] _grid = _gridScriptableObject.GetGrid();
+            _grid[i][_xStartPosition].SetColor(GetRandomColor(random));
+        }
+
     }
     private void HighlightWordXAxis() 
     {
         int random = GetRandomInt();
-        int _yAxis = startPoint.GetPositionY();
-        for (int i = startPoint.GetPositionX(); i <= endPoint.GetPositionX(); i++)
+
+        for (int i = _xStartPosition; i <= _xEndPosition; i++)
         {
             CellPosition[][] _grid = _gridScriptableObject.GetGrid();
-            _grid[_yAxis][i].SetColor(GetRandomColor(random));
+            _grid[_yStartPosition][i].SetColor(GetRandomColor(random));
+        }
+        for (int i = _xStartPosition; i >= _xEndPosition; i--)
+        {
+            CellPosition[][] _grid = _gridScriptableObject.GetGrid();
+            _grid[_yStartPosition][i].SetColor(GetRandomColor(random));
         }
     }
     private int GetRandomInt()

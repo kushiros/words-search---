@@ -79,7 +79,7 @@ public class WordSearchInitializeGrid : MonoBehaviour
             {
                 int row = random.Next(rows);
                 int col = random.Next(cols);
-                int direction = random.Next(2); // 0: horizontal, 1: vertical
+                int direction = random.Next(4); // 0: horizontal, 1: vertical
 
                 if (CanPlaceWord(word, row, col, direction))
                 {
@@ -91,46 +91,81 @@ public class WordSearchInitializeGrid : MonoBehaviour
     }
     private bool CanPlaceWord(string word, int row, int col, int direction)
     {
-        if (direction == 0) // Horizontal
-        {
-            if (col + word.Length > cols) return false;
-            for (int i = 0; i < word.Length; i++)
-            {
-                if (grid[row][ col + i].GetLetter() != '\0' && grid[row][col + i].GetLetter() != word[i])
-                    return false;
-            }
+        switch(direction){
+            case 0:
+                if (col + word.Length > cols) return false;
+                for (int i = 0; i < word.Length; i++)
+                {
+                    if (grid[row][col + i].GetLetter() != '\0' && grid[row][col + i].GetLetter() != word[i])
+                        return false;
+                }
+                break;
+            case 1:
+                if (row + word.Length > rows) return false;
+                for (int i = 0; i < word.Length; i++)
+                {
+                    if (grid[row + i][col].GetLetter() != '\0' && grid[row + i][col].GetLetter() != word[i])
+                        return false;
+                }
+                break;
+            case 2: // Vertical hacia arriba
+                if (row - word.Length < 0) return false;
+                for (int i = 0; i < word.Length; i++)
+                {
+                    if (grid[row - i][col].GetLetter() != '\0' && grid[row - i][col].GetLetter() != word[i])
+                        return false;
+                }
+                break;
+            case 3: // Horizontal hacia la izquierda
+                if (col - word.Length < 0) return false;
+                for (int i = 0; i < word.Length; i++)
+                {
+                    if (grid[row][col - i].GetLetter() != '\0' && grid[row][col - i].GetLetter() != word[i])
+                        return false;
+                }
+                break;
         }
-        else // Vertical
-        {
-            if (row + word.Length > rows) return false;
-            for (int i = 0; i < word.Length; i++)
-            {
-                if (grid[row + i][col].GetLetter() != '\0' && grid[row + i][col].GetLetter() != word[i])
-                    return false;
-            }
-        }
+
+
+
         return true;
     }
 
     private void PlaceWord(string word, int row, int col, int direction)
     {
-        if (direction == 0) // Horizontal
+        switch (direction)
         {
-            for (int i = 0; i < word.Length; i++)
-            {
-                grid[row][ col + i].SetLetter(word[i]);
-                grid[row][col + i].SetColor(UnityEngine.Color.red);
-            }
-        }
-        else // Vertical
-        {
-            for (int i = 0; i < word.Length; i++)
-            {
-                grid[row + i][ col].SetLetter(word[i]);
-                grid[row + i][col].SetColor(UnityEngine.Color.red);
-            }
+            case 0: // Horizontal hacia la derecha
+                for (int i = 0; i < word.Length; i++)
+                {
+                    grid[row][col + i].SetLetter(word[i]);
+                    grid[row][col + i].SetColor(UnityEngine.Color.red);
+                }
+                break;
+            case 1: // Vertical hacia abajo
+                for (int i = 0; i < word.Length; i++)
+                {
+                    grid[row + i][col].SetLetter(word[i]);
+                    grid[row + i][col].SetColor(UnityEngine.Color.red);
+                }
+                break;
+            case 2: // Vertical hacia arriba
+                for (int i = 0; i < word.Length; i++)
+                {
+                    grid[row - i][col].SetLetter(word[i]);
+                    grid[row - i][col].SetColor(UnityEngine.Color.red);
+                }
+                break;
+            case 3: // Horizontal hacia la izquierda
+                for (int i = 0; i < word.Length; i++)
+                {
+                    grid[row][col - i].SetLetter(word[i]);
+                    grid[row][col - i].SetColor(UnityEngine.Color.red);
+                }
+                break;
         }
     }
+
 
     private void FillRandomLetters()
     {
