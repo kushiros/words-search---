@@ -38,6 +38,11 @@ public class WordsearchGrid_ScriptableObject : ScriptableObject
         }
         return toReturn;
     }
+
+    public List<string>  GetWordsList()
+    {
+        return words;
+    }
     public void ReturnColorToWhite()
     {
         for (int i = 0;(grid.Length) > i;i++)
