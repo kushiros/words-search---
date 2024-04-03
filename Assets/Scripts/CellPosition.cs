@@ -10,10 +10,12 @@ public class CellPosition : MonoBehaviour
     [SerializeField] private Image image;
     [SerializeField] private int positionX;
     [SerializeField] private int positionY;
+    
+    [SerializeField] private RotateToTheMouse _rotateToTheMouse;
 
     void Start()
     {
-        
+        _rotateToTheMouse = GetComponentInChildren<RotateToTheMouse>();
     }
 
     // Update is called once per frame
@@ -47,5 +49,13 @@ public class CellPosition : MonoBehaviour
     public int GetPositionY()
     {
         return positionY;
+    }
+    public void StartRotation()
+    {
+        _rotateToTheMouse.StartRotation();
+    }
+    public void EndRotation()
+    {
+        _rotateToTheMouse.EndRotation();
     }
 }

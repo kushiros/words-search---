@@ -14,8 +14,12 @@ public class Words_Controller : MonoBehaviour
         words = ScriptableObject.GetWordsList();
         GetTMProChildren();
         SetWordsToTMPro();
+        ScriptableObject.OnWordFound += ChangeWordColor;
     }
-
+    private void OnDestroy()
+    {
+        ScriptableObject.OnWordFound -= ChangeWordColor; 
+    }
     private void GetTMProChildren()
     {
         for (int i = 0; i < transform.childCount; i++)
@@ -42,8 +46,17 @@ public class Words_Controller : MonoBehaviour
             }
             else
             {
-                break; // Si hay más TextMeshPro que palabras, detener el bucle
+                break;
             }
+        }
+    }
+    private void ChangeWordColor(string word)
+    {
+        int index = words.IndexOf(word);
+        if (index != -1 && index < TMProList.Count)
+        {
+            Color originalColor = TMProList[index].color;
+            TMProList[index].color = new Color(originalColor.r, originalColor.g, originalColor.b, 25f / 255f); 
         }
     }
 }

@@ -9,6 +9,7 @@ public class WordSelection : ScriptableObject
 {
     private int _xStartPosition, _yStartPosition;
     private int _xEndPosition, _yEndPosition;
+    private CellPosition startCell, endCell;
     private string CurrentWord = "";
     [SerializeField] WordsearchGrid_ScriptableObject _gridScriptableObject;
     [SerializeField] Color[] _color = new Color[4];
@@ -16,11 +17,16 @@ public class WordSelection : ScriptableObject
 
     public void SetStartPoint(CellPosition point)
     {
+        startCell = point;
+
         _xStartPosition = point.GetPositionX();
         _yStartPosition = point.GetPositionY();
+        point.StartRotation();
     }
     public void SetEndPoint(CellPosition point)
     {
+        startCell.EndRotation();
+        endCell = point;
         _xEndPosition = point.GetPositionX();
         _yEndPosition = point.GetPositionY();
         CheckPosibleSelectedWord();
@@ -76,7 +82,7 @@ public class WordSelection : ScriptableObject
         if (_gridScriptableObject.CheckWordsListWithWordObtained(CurrentWord))
         {
             
-            HighlightWordXAxis();
+            //HighlightWordXAxis();
         }
     }
     private void CheckYAxis()
@@ -104,7 +110,7 @@ public class WordSelection : ScriptableObject
         if (_gridScriptableObject.CheckWordsListWithWordObtained(CurrentWord))
         {
             
-            HighlightWordYAxys();
+            //HighlightWordYAxys();
         }
         
     }
