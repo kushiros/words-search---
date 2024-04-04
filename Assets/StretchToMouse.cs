@@ -8,6 +8,7 @@ public class StretchToMouse : MonoBehaviour
     [SerializeField] private bool _canStretch = false;
     private Image _image;
     private Canvas canvas;
+    private Vector2 startPosition;
 
     void Start()
     {
@@ -19,23 +20,17 @@ public class StretchToMouse : MonoBehaviour
         canvas = GetComponentInParent<Canvas>();
     }
 
-    /*void Update()
+    void Update()
     {
         if (!_canStretch) return;
 
-        // Convierte la posición del mouse de la pantalla a una posición local en el RectTransform
-        Vector2 localPoint;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), Input.mousePosition, canvas.worldCamera, out localPoint);
-
-        // Calcula la altura como la distancia en el eje Y desde la posición local del objeto hasta el punto local del mouse
-        float height = Mathf.Abs(localPoint.y - rectTransform.anchoredPosition.y);
-
-        // Ajustar la altura del rectTransform
-        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, height);
-    }*/
+        StretchToCurrentMousePosition();
+    }
 
     public void StartStretch(Vector3 _position)
     {
+        // Convierte la posición inicial del mouse de la pantalla a una posición local en el RectTransform
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), _position, canvas.worldCamera, out startPosition);
         _canStretch = true;
         _image.enabled = true;
     }
@@ -43,5 +38,18 @@ public class StretchToMouse : MonoBehaviour
     public void EndStretch()
     {
         _canStretch = false;
+    }
+
+    private void StretchToCurrentMousePosition()
+    {
+        // Convierte la posición actual del mouse de la pantalla a una posición local en el RectTransform
+        Vector2 currentMouseLocalPoint;
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), Input.mousePosition, canvas.worldCamera, out currentMouseLocalPoint);
+
+        // Calcula la distancia entre la posición inicial y la posición actual del mouse en el espacio local del Canvas
+        float distance = Vector2.Distance(startPosition, currentMouseLocalPoint);
+
+        // Ajustar el sizeDelta del RectTransform basado en
+        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, distance);
     }
 }
