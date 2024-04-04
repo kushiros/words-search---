@@ -64,6 +64,7 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     public void SetFirstClickTrue()
     {
         _firstClick = true;
+        onClick.AddToListCellPosition(this); 
     }
     public void SetFirstClickFalse()
     {
@@ -73,11 +74,17 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (!onClick.GetWaitForEndButton()) return;
+        onClick.AddToListCellPosition(this);
         Debug.Log("ayudame loco");
+        charController.ChangeCharColor();
+    }
+    public CharController GetcharController()
+    {
+        return charController;
     }
 
-    /*public void OnPointerExit(PointerEventData eventData)
+    public void resetColors()
     {
-        Debug.Log("acabe loco");
-    }*/
+        onClick.DeleteAllListCellPosition();
+    }
 }

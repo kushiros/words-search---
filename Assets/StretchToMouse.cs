@@ -9,12 +9,14 @@ public class StretchToMouse : MonoBehaviour
     private Canvas canvas;
     private Vector2 startPosition;
     private BoxCollider2D boxCollider; // Agregar referencia al BoxCollider2D
+    [SerializeField] Material[] _color = new Material[4];
 
     void Start()
     {
 
         rectTransform = GetComponent<RectTransform>();
         _image = GetComponent<Image>();
+        _image.material = GetRandomColor(GetRandomInt());
         boxCollider = GetComponent<BoxCollider2D>();
         canvas = GetComponentInParent<Canvas>();
     }
@@ -51,6 +53,16 @@ public class StretchToMouse : MonoBehaviour
         rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, distance);
 
     }
- 
-    
+    private int GetRandomInt()
+    {
+        System.Random random = new System.Random();
+        int randomNumber = random.Next(0, 4);
+        return randomNumber;
+    }
+    private Material GetRandomColor(int i)
+    {
+        return _color[i];
+    }
+
+
 }

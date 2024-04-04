@@ -12,13 +12,13 @@ public class WordSelection : ScriptableObject
     private CellPosition startCell, endCell;
     private string CurrentWord = "";
     [SerializeField] WordsearchGrid_ScriptableObject _gridScriptableObject;
-    [SerializeField] Color[] _color = new Color[4];
+
     
 
     public void SetStartPoint(CellPosition point)
     {
         startCell = point;
-
+        point.GetcharController().ChangeCharColor();
         _xStartPosition = point.GetPositionX();
         _yStartPosition = point.GetPositionY();
         Vector3 _position = point.transform.position;
@@ -30,6 +30,7 @@ public class WordSelection : ScriptableObject
         startCell.EndRotation();
         startCell.SetFirstClickFalse();
         endCell = point;
+        startCell.resetColors();
         _xEndPosition = point.GetPositionX();
         _yEndPosition = point.GetPositionY();
         
@@ -98,7 +99,7 @@ public class WordSelection : ScriptableObject
             {
                 CellPosition[][] _grid = _gridScriptableObject.GetGrid();
                 CurrentWord += _grid[i][_xStartPosition].GetLetter();
-                
+
             }
         }
         else
@@ -113,50 +114,11 @@ public class WordSelection : ScriptableObject
         Debug.Log(CurrentWord);
         if (_gridScriptableObject.CheckWordsListWithWordObtained(CurrentWord))
         {
-            
+
             //HighlightWordYAxys();
         }
-        
-    }
-    private void HighlightWordYAxys()
-    {
-        int random = GetRandomInt();
-
-        for (int i = _yStartPosition; i <= _yEndPosition; i++)
-        {
-            CellPosition[][] _grid = _gridScriptableObject.GetGrid();
-            _grid[i][_xStartPosition].SetColor(GetRandomColor(random));
-        }
-        for (int i = _yStartPosition; i >= _yEndPosition; i--)
-        {
-            CellPosition[][] _grid = _gridScriptableObject.GetGrid();
-            _grid[i][_xStartPosition].SetColor(GetRandomColor(random));
-        }
 
     }
-    private void HighlightWordXAxis() 
-    {
-        int random = GetRandomInt();
 
-        for (int i = _xStartPosition; i <= _xEndPosition; i++)
-        {
-            CellPosition[][] _grid = _gridScriptableObject.GetGrid();
-            _grid[_yStartPosition][i].SetColor(GetRandomColor(random));
-        }
-        for (int i = _xStartPosition; i >= _xEndPosition; i--)
-        {
-            CellPosition[][] _grid = _gridScriptableObject.GetGrid();
-            _grid[_yStartPosition][i].SetColor(GetRandomColor(random));
-        }
-    }
-    private int GetRandomInt()
-    {
-        System.Random random = new System.Random();
-        int randomNumber = random.Next(0,4);
-        return randomNumber;
-    }
-    private Color GetRandomColor(int i)
-    {
-        return _color[i];
-    }
+    
 }

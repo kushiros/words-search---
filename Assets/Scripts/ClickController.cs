@@ -26,7 +26,8 @@ public class ClickController : MonoBehaviour, IPointerDownHandler
     private void SetStartButton()
     {
         _wordSelection.SetStartPoint(_cellPosition);
-        ScriptableObject.ChangeWaitForEndButtonToTrue();
+        ScriptableObject.ChangeWaitForEndButtonToTrue(GetComponent<CellPosition>());
+        
     }
 
     private void SetEndButton()
