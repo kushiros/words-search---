@@ -19,7 +19,7 @@ public class StretchToMouse : MonoBehaviour
         canvas = GetComponentInParent<Canvas>();
     }
 
-    void Update()
+    /*void Update()
     {
         if (!_canStretch) return;
 
@@ -32,9 +32,9 @@ public class StretchToMouse : MonoBehaviour
 
         // Ajustar la altura del rectTransform
         rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, height);
-    }
+    }*/
 
-    public void StartStretch()
+    public void StartStretch(Vector3 _position)
     {
         _canStretch = true;
         _image.enabled = true;

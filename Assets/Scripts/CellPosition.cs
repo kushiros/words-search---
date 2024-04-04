@@ -50,9 +50,9 @@ public class CellPosition : MonoBehaviour
     {
         return positionY;
     }
-    public void StartRotation()
+    public void StartRotation(Vector3 _position)
     {
-        _rotateToTheMouse.StartRotation();
+        _rotateToTheMouse.StartRotation(_position);
     }
     public void EndRotation()
     {

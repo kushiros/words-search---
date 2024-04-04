@@ -21,7 +21,8 @@ public class WordSelection : ScriptableObject
 
         _xStartPosition = point.GetPositionX();
         _yStartPosition = point.GetPositionY();
-        point.StartRotation();
+        Vector3 _position = point.transform.position;
+        point.StartRotation(_position);
     }
     public void SetEndPoint(CellPosition point)
     {
