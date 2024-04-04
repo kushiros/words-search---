@@ -23,13 +23,16 @@ public class WordSelection : ScriptableObject
         _yStartPosition = point.GetPositionY();
         Vector3 _position = point.transform.position;
         point.StartRotation(_position);
+        point.SetFirstClickTrue();
     }
     public void SetEndPoint(CellPosition point)
     {
         startCell.EndRotation();
+        startCell.SetFirstClickFalse();
         endCell = point;
         _xEndPosition = point.GetPositionX();
         _yEndPosition = point.GetPositionY();
+        
         CheckPosibleSelectedWord();
 
     }

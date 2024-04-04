@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CellPosition : MonoBehaviour
+public class CellPosition : MonoBehaviour, IPointerEnterHandler
 {
     private char actualChar;
     [SerializeField]private CharController charController;
     [SerializeField] private Image image;
     [SerializeField] private int positionX;
     [SerializeField] private int positionY;
-    
+    private bool _firstClick;
+    [SerializeField]onClick_scriptableObject onClick;
     [SerializeField] private RotateToTheMouse _rotateToTheMouse;
 
     void Start()
@@ -23,6 +25,7 @@ public class CellPosition : MonoBehaviour
     {
         
     }
+
     public char GetLetter()
     { 
        return charController.GetChar();
@@ -58,4 +61,23 @@ public class CellPosition : MonoBehaviour
     {
         _rotateToTheMouse.EndRotation();
     }
+    public void SetFirstClickTrue()
+    {
+        _firstClick = true;
+    }
+    public void SetFirstClickFalse()
+    {
+        _firstClick = false;
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (!onClick.GetWaitForEndButton()) return;
+        Debug.Log("ayudame loco");
+    }
+
+    /*public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("acabe loco");
+    }*/
 }

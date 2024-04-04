@@ -42,24 +42,23 @@ public class RotateToTheMouse : MonoBehaviour
     {
         if (canvas == null) return;
 
-        // Convertir la posición inicial del ratón a coordenadas locales del Canvas
+        
         Vector2 startLocalPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), startPosition, canvas.worldCamera, out startLocalPoint);
 
-        // Convertir la posición actual del ratón a coordenadas locales del Canvas
+        
         Vector2 currentLocalPoint;
         RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.GetComponent<RectTransform>(), Input.mousePosition, canvas.worldCamera, out currentLocalPoint);
 
-        // Calcular la dirección desde el punto de inicio hasta el punto actual del ratón
+   
         Vector2 directionFromStart = currentLocalPoint - startLocalPoint;
 
-        // Calcular el ángulo en relación con la posición inicial
         float angleFromStart = Mathf.Atan2(directionFromStart.y, directionFromStart.x) * Mathf.Rad2Deg;
 
-        // Restar 90 para que 0 grados sea arriba, -90 derecha, etc.
-        float adjustedAngle = angleFromStart - 90;
+        angleFromStart -= 90;
 
-        // Establecer la rotación local del objeto para que mire hacia la dirección calculada
-        rectTransform.localRotation = Quaternion.Euler(new Vector3(0, 0, adjustedAngle));
+        float roundedAngle = Mathf.Round(angleFromStart / 90) * 90;
+
+        rectTransform.localRotation = Quaternion.Euler(new Vector3(0, 0, roundedAngle));
     }
 }

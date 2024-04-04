@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName ="holapadre/hola")]
 public class onClick_scriptableObject : ScriptableObject
 {
-    [SerializeField] bool waitForEndbutton;
+    [SerializeField] bool waitForEndbutton =false;
 
     public void ChangeWaitForEndButtonToFalse() {  waitForEndbutton = false; }
     public void ChangeWaitForEndButtonToTrue() {  waitForEndbutton = true; }
