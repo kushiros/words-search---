@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+[CreateAssetMenu]
 
 public class Actual2CellsContainer_ScriptableObject : ScriptableObject
 {
@@ -18,10 +19,26 @@ public class Actual2CellsContainer_ScriptableObject : ScriptableObject
     public bool CheckThisPositionWithFirst(CellPosition cellPosition)
     {
         if (firstClickPosition == null) return false;
-        if (toCheckPosition == null) return false;
+        if (cellPosition == null) return false;
         if (firstClickX == cellPosition.GetPositionX()){
+            check_X_if_True_Y_If_False = true;
             return true;
         }
-        return true;
+        if(firstClickY == cellPosition.GetPositionY())
+        {
+            check_X_if_True_Y_If_False= false;
+            return true;
+        }
+        return false;
+    }
+    public void Reset()
+    {
+        firstClickPosition = null;
+        firstClickX = 0; 
+        firstClickY = 0;
+        toCheckPosition = null;
+        toCheckPositionX = 0;
+        toCheckPositionY = 0;
+
     }
 }

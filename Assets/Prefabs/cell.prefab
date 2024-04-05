@@ -446,6 +446,7 @@ MonoBehaviour:
   positionX: 0
   positionY: 0
   onClick: {fileID: 11400000, guid: 90d33140b3b0ae342abb2354455aec11, type: 2}
+  act: {fileID: 11400000, guid: d4fc129e0ab4a3f4bae59385ac05c46d, type: 2}
   _rotateToTheMouse: {fileID: 0}
 --- !u!114 &5463092953534028757
 MonoBehaviour:

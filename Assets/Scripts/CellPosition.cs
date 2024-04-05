@@ -13,6 +13,7 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     [SerializeField] private int positionY;
     private bool _firstClick;
     [SerializeField]onClick_scriptableObject onClick;
+    [SerializeField] Actual2CellsContainer_ScriptableObject act;
     [SerializeField] private RotateToTheMouse _rotateToTheMouse;
 
     void Start()
@@ -64,7 +65,8 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     public void SetFirstClickTrue()
     {
         _firstClick = true;
-        onClick.AddToListCellPosition(this); 
+        onClick.AddToListCellPosition(this);
+        act.SetFirstClickPosition(this);
     }
     public void SetFirstClickFalse()
     {
@@ -74,6 +76,8 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (!onClick.GetWaitForEndButton()) return;
+        if (!act.CheckThisPositionWithFirst(this)) return;
+
         onClick.AddToListCellPosition(this);
         Debug.Log("ayudame loco");
         charController.ChangeCharColor();
@@ -86,5 +90,7 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     public void resetColors()
     {
         onClick.DeleteAllListCellPosition();
+        act.Reset();
     }
+    
 }
