@@ -791,6 +791,8 @@ MonoBehaviour:
   - 
   TMProList: []
   ScriptableObject: {fileID: 11400000, guid: d74e72434df733743b227a7f1d86066d, type: 2}
+  actualWord: {fileID: 0}
+  colorAtFinish: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &597250512
 GameObject:
   m_ObjectHideFlags: 0

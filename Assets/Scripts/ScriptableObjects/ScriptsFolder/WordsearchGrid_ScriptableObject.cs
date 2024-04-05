@@ -50,10 +50,11 @@ public class WordsearchGrid_ScriptableObject : ScriptableObject
     }
     public void ReturnColorToWhite()
     {
+        Color color = new Color(254f/255f, 228f/255f, 197f/255f);
         for (int i = 0;(grid.Length) > i;i++)
         {
             for(int j = 0;j < (grid[0].Length);j++) {
-                grid[i][j].SetColor(Color.white);
+                grid[i][j].SetColor(color);
             }
         }
     }
