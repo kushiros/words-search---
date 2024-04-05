@@ -27,14 +27,17 @@ public class WordSelection : ScriptableObject
     }
     public void SetEndPoint(CellPosition point)
     {
-        startCell.EndRotation();
-        startCell.SetFirstClickFalse();
+        
         endCell = point;
-        startCell.resetColors();
+        
         _xEndPosition = point.GetPositionX();
         _yEndPosition = point.GetPositionY();
         
-        CheckPosibleSelectedWord();
+        bool _toReturn = CheckPosibleSelectedWord();
+        startCell.EndRotation(_toReturn);
+        startCell.SetFirstClickFalse();
+        startCell.resetColors();
+        Reset();
 
     }
     public string GetSelectedWord()
@@ -49,23 +52,26 @@ public class WordSelection : ScriptableObject
         _yStartPosition= 0;
         CurrentWord = "";
     }
-    private void CheckPosibleSelectedWord()
+    private bool CheckPosibleSelectedWord()
     {
+        bool _toReturn = false;
         if (_xStartPosition == _xEndPosition)
         {
-            CheckYAxis();
+            _toReturn = CheckYAxis();
         }
         else if (_yStartPosition == _yEndPosition)
         {
-            
-            CheckXAxis();
+
+            _toReturn = CheckXAxis();
         }
-        Reset();
+
+        
+        return _toReturn;
 
     }
-    private void CheckXAxis()
+    private bool CheckXAxis()
     {
-
+        bool _toReturn = false;
         if(_xStartPosition <  _xEndPosition)
         {
             for (int i = _xStartPosition; i <= _xEndPosition; i++)
@@ -86,13 +92,15 @@ public class WordSelection : ScriptableObject
         
         if (_gridScriptableObject.CheckWordsListWithWordObtained(CurrentWord))
         {
+            _toReturn = true;
             
-            //HighlightWordXAxis();
         }
-    }
-    private void CheckYAxis()
-    {
 
+        return _toReturn;
+    }
+    private bool CheckYAxis()
+    {
+        bool _toReturn = false;
         if (_yStartPosition < _yEndPosition)
         {
             for (int i = _yStartPosition; i <= _yEndPosition; i++)
@@ -115,8 +123,9 @@ public class WordSelection : ScriptableObject
         if (_gridScriptableObject.CheckWordsListWithWordObtained(CurrentWord))
         {
 
-            //HighlightWordYAxys();
+            _toReturn= true;
         }
+        return _toReturn;
 
     }
 

@@ -91,11 +91,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _canStretch: 0
-  _color:
-  - {fileID: 2100000, guid: 32eab14c1ebc27b47bb123db6e9d006c, type: 2}
-  - {fileID: 2100000, guid: 62084d278e2fce24995b965f0d679f19, type: 2}
-  - {fileID: 2100000, guid: 7535904de937d5946b7584068e5e2dc9, type: 2}
-  - {fileID: 2100000, guid: 48e3fde68d5cd5549abe11e11d784b4c, type: 2}
+  EventColorController: {fileID: 11400000, guid: d287b9847cdb5d44b968b1f39679d2d4, type: 2}
 --- !u!223 &6456121481458207201
 Canvas:
   m_ObjectHideFlags: 0

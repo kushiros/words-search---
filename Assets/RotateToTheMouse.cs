@@ -33,10 +33,10 @@ public class RotateToTheMouse : MonoBehaviour
         _stretchToMouse.StartStretch(_Position);
     }
 
-    public void EndRotation()
+    public void EndRotation(int _intToMultiplyTheStretch,bool correctWord)
     {
         _canRotate = false;
-        _stretchToMouse.EndStretch();
+        _stretchToMouse.EndStretch(_intToMultiplyTheStretch,correctWord);
     }
     private void UpdatePosition()
     {

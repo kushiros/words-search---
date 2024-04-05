@@ -58,9 +58,9 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     {
         _rotateToTheMouse.StartRotation(_position);
     }
-    public void EndRotation()
+    public void EndRotation(bool correctWord)
     {
-        _rotateToTheMouse.EndRotation();
+        _rotateToTheMouse.EndRotation(act.GetTotalCellsChecked(),correctWord);
     }
     public void SetFirstClickTrue()
     {
