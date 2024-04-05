@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firstClickPosition: {fileID: 0}
   toCheckPosition: {fileID: 0}
-  firstClickX: 0
-  firstClickY: 0
+  firstClickX: 4
+  firstClickY: 4
   toCheckPositionX: 0
   toCheckPositionY: 0
-  check_X_if_True_Y_If_False: 0
-  EventColorController: {fileID: 11400000, guid: d287b9847cdb5d44b968b1f39679d2d4, type: 2}
+  check_X_if_True_Y_If_False: 1
+  jump: {fileID: 11400000, guid: 98733122bc84f8749b35a051774ac4df, type: 2}

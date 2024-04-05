@@ -23,13 +23,14 @@ public class CharController : MonoBehaviour
         int randomInt = random.Next(0, 26);
 
         //actualChar = (char)('A' + randomInt);
-        actualChar = '\0';
+        
     }
    
     private void UpdateTextMesh()
     {
         if (textMesh != null)
         {
+
             textMesh.text = actualChar.ToString();
         }
     }

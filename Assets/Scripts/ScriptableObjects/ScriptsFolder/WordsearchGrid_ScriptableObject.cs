@@ -10,6 +10,7 @@ public class WordsearchGrid_ScriptableObject : ScriptableObject
     [SerializeField] CellPosition[][] grid;
     [SerializeField] private List<string> words;
     public event Action<string> OnWordFound;
+    
 
     public void SetGrid(CellPosition[][] _grid)
     {
@@ -36,6 +37,7 @@ public class WordsearchGrid_ScriptableObject : ScriptableObject
             if (word == _string)
             {
                 OnWordFound?.Invoke(_string);
+                
                 return true;
             }
         }

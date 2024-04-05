@@ -8,6 +8,7 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
 {
     private char actualChar;
     [SerializeField]private CharController charController;
+    [SerializeField] private GameObject CharComponent;
     [SerializeField] private Image image;
     [SerializeField] private int positionX;
     [SerializeField] private int positionY;
@@ -19,6 +20,7 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     void Start()
     {
         _rotateToTheMouse = GetComponentInChildren<RotateToTheMouse>();
+        //CharComponent = GetComponentInChildren<CharController>().gameObject;
     }
 
     // Update is called once per frame
@@ -64,6 +66,7 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     }
     public void SetFirstClickTrue()
     {
+        onClick.ResetList();
         _firstClick = true;
         onClick.AddToListCellPosition(this);
         act.SetFirstClickPosition(this);
@@ -91,6 +94,10 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     {
         onClick.DeleteAllListCellPosition();
         act.Reset();
+    }
+    public GameObject GetCharComponent()
+    {
+        return CharComponent;
     }
     
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,9 +9,13 @@ public class Words_Controller : MonoBehaviour
     [SerializeField] private List<string> words;
     [SerializeField] private List<TextMeshProUGUI> TMProList = new List<TextMeshProUGUI>();
     [SerializeField] WordsearchGrid_ScriptableObject ScriptableObject;
+    public event Action<Vector3> findWordPosition;
+    [SerializeField] GameObject actualWord;
+    [SerializeField] Color colorAtFinish;
 
     private void Start()
     {
+
         words = ScriptableObject.GetWordsList();
         GetTMProChildren();
         SetWordsToTMPro();
@@ -55,8 +60,23 @@ public class Words_Controller : MonoBehaviour
         int index = words.IndexOf(word);
         if (index != -1 && index < TMProList.Count)
         {
-            Color originalColor = TMProList[index].color;
-            TMProList[index].color = new Color(originalColor.r, originalColor.g, originalColor.b, 25f / 255f); 
+            colorAtFinish = TMProList[index].color;
+            colorAtFinish = new Color(colorAtFinish.r, colorAtFinish.g, colorAtFinish.b, 25f / 255f);
+
+            actualWord = TMProList[index].gameObject;
+            
+            Vector3 centerPosition = TMProList[index].rectTransform.TransformPoint(TMProList[index].rectTransform.rect.center);
+            findWordPosition?.Invoke(centerPosition);
+
         }
+    }
+
+    public GameObject GetActualWord()
+    {
+        return actualWord;
+    }
+    public Color GetColorAtFinish()
+    {
+        return colorAtFinish;
     }
 }

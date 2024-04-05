@@ -12,6 +12,7 @@ public class WordSelection : ScriptableObject
     private CellPosition startCell, endCell;
     private string CurrentWord = "";
     [SerializeField] WordsearchGrid_ScriptableObject _gridScriptableObject;
+    
 
     
 

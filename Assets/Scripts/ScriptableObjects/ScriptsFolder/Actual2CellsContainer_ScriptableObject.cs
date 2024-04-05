@@ -10,7 +10,7 @@ public class Actual2CellsContainer_ScriptableObject : ScriptableObject
     [SerializeField] CellPosition firstClickPosition, toCheckPosition;
     [SerializeField] int firstClickX,firstClickY,toCheckPositionX,toCheckPositionY;
     [SerializeField] bool check_X_if_True_Y_If_False;
-
+    [SerializeField] animationScriptableObject jump;
     
     private int _totalCellsChecked;
     public event Action<char> OnCharEvent;
@@ -21,9 +21,11 @@ public class Actual2CellsContainer_ScriptableObject : ScriptableObject
     public void SetFirstClickPosition(CellPosition cellPosition)
     {
         firstClickPosition = cellPosition;
+        jump.Jump(cellPosition.GetCharComponent());
         firstClickX = firstClickPosition.GetPositionX();
         firstClickY =  firstClickPosition.GetPositionY();
         OnCharEvent?.Invoke(cellPosition.GetLetter());
+
         
     }
 
@@ -36,6 +38,7 @@ public class Actual2CellsContainer_ScriptableObject : ScriptableObject
             check_X_if_True_Y_If_False = true;
             _totalCellsChecked++;
             OnCharEvent?.Invoke(cellPosition.GetLetter());
+            jump.Jump(cellPosition.GetCharComponent());
             return true;
         }
         return false;
@@ -55,9 +58,5 @@ public class Actual2CellsContainer_ScriptableObject : ScriptableObject
     public int GetTotalCellsChecked()
     {
         return _totalCellsChecked;
-    }
-    private void SetColorMaterial()
-    {
-
     }
 }

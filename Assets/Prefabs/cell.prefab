@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 1984933474852921260}
   - component: {fileID: 2524141004999222245}
   m_Layer: 0
-  m_Name: Text (TMP)
+  m_Name: char
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -140,7 +140,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1658384633598010648}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -438,6 +438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   charController: {fileID: 1984933474852921260}
+  CharComponent: {fileID: 1658384633598010648}
   image: {fileID: 7211262549392254703}
   positionX: 0
   positionY: 0
