@@ -8,7 +8,7 @@ using UnityEngine;
 public class ColorController_ScriptableObject : ScriptableObject
     
 {
-    [SerializeField] private Material[] materials = new Material[4];
+    [SerializeField] private Material[] materials = new Material[5];
     // Start is called before the first frame update
 
     public event Action<Material> OnChangeMaterialEvent;
@@ -23,7 +23,7 @@ public class ColorController_ScriptableObject : ScriptableObject
     private int GetRandomInt()
     {
         System.Random random = new System.Random();
-        int randomNumber = random.Next(0, 4);
+        int randomNumber = random.Next(0, 5);
         return randomNumber;
     }
     private Material GetRandomColor(int i)
