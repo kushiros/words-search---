@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 public class StretchToMouse : MonoBehaviour
 {
@@ -54,9 +56,14 @@ public class StretchToMouse : MonoBehaviour
         if (_isVertival)
         {
             rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, (_intToMultiply + 1) * enlargeXValue);
-            return;
+
         }
-        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, (_intToMultiply + 1) * enlargeYValue);
+        else
+        {
+            rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, (_intToMultiply + 1) * enlargeYValue);
+        }
+        AnimateImage();
+        
 
     }
 
@@ -78,6 +85,41 @@ public class StretchToMouse : MonoBehaviour
         enlargeYValue = _y;
         EnlargeHeightValue.widthCellXYSizeEvent -= SetXandY;
     }
+    private void AnimateImage()
+    {
+        RectTransform rectTransform = gameObject.GetComponent<RectTransform>();
+        Vector2 originalPivot = rectTransform.pivot; // Almacena el valor original del pivot
+
+        // Calcula la posición del objeto antes de cambiar el pivot
+        Vector2 originalPosition = rectTransform.anchoredPosition;
+
+        // Cambia el pivot a (0.5, 0.5)
+        rectTransform.pivot = new Vector2(0.5f, 0.5f);
+
+        // Calcula el desplazamiento causado por el cambio en el pivot
+        Vector2 pivotOffset = new Vector2(
+            (0.5f - originalPivot.x) * rectTransform.rect.width,
+            (0.5f - originalPivot.y) * rectTransform.rect.height
+        );
+
+        // Ajusta la posición para mantener la misma posición visual
+        rectTransform.anchoredPosition = originalPosition + pivotOffset;
+
+        Vector3 originalScale = gameObject.transform.localScale;
+
+        // Inicia la animación de escala
+        LeanTween.scale(gameObject, originalScale * 1.1f, 0.3f).setOnComplete(() =>
+        {
+            LeanTween.scale(gameObject, originalScale, 0.2f).setOnComplete(() =>
+            {
+                // Restaura el valor original del pivot y ajusta la posición nuevamente
+                rectTransform.pivot = originalPivot;
+                rectTransform.anchoredPosition = originalPosition;
+            });
+        });
+    }
+
+
 
 
 
