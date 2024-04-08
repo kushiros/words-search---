@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 766f23a37bc99fe4d8d99f22037bde61, type: 3}
   m_Name: New Panel Size_Scriptable Object
   m_EditorClassIdentifier: 
+  _width: 972
+  _height: 972
+  widthCellSize: 0
+  heightCellSize: 0
   wordSearchXSize: 10
   wordSearchYSize: 10

@@ -92,6 +92,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canStretch: 0
   EventColorController: {fileID: 11400000, guid: d287b9847cdb5d44b968b1f39679d2d4, type: 2}
+  EnlargeHeightValue: {fileID: 11400000, guid: a5ee71833e312df44ac10061e1f9e4ff, type: 2}
+  enlargeXValue: 0
+  enlargeYValue: 0
 --- !u!223 &6456121481458207201
 Canvas:
   m_ObjectHideFlags: 0

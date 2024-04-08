@@ -24,7 +24,10 @@ public class WordSearchInitializeGrid : MonoBehaviour
         RectTransform rectTransform = GetComponent<RectTransform>();
         if (rectTransform != null)
         {
-            panelSize.GetGridSize((int)rectTransform.rect.width, (int)rectTransform.rect.height);
+            panelSize.SetGridSize((int)rectTransform.rect.width, (int)rectTransform.rect.height);
+            cols = panelSize.GetColumnAmount();
+            rows = panelSize.GetRowsAmount();
+                
         }
         /*if(!_gridScriptableObject.getChange())
         {

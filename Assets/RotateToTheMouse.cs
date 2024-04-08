@@ -36,7 +36,8 @@ public class RotateToTheMouse : MonoBehaviour
     public void EndRotation(int _intToMultiplyTheStretch,bool correctWord)
     {
         _canRotate = false;
-        _stretchToMouse.EndStretch(_intToMultiplyTheStretch,correctWord);
+        bool isVertical = Mathf.Abs(rectTransform.localRotation.eulerAngles.z % 180) < 45;
+        _stretchToMouse.EndStretch(_intToMultiplyTheStretch,correctWord,isVertical);
     }
     private void UpdatePosition()
     {

@@ -8,19 +8,25 @@ public class StretchToMouse : MonoBehaviour
     private Image _image;
     private Canvas canvas;
     private Vector2 startPosition;
-    private BoxCollider2D boxCollider; // Agregar referencia al BoxCollider2D
+    
 
     [SerializeField] ColorController_ScriptableObject EventColorController;
+    [SerializeField] EnlargeHeightValue EnlargeHeightValue;
+    [SerializeField] float enlargeXValue;
+    [SerializeField] float enlargeYValue;
 
     void Start()
     {
 
         rectTransform = GetComponent<RectTransform>();
         _image = GetComponent<Image>();
-        boxCollider = GetComponent<BoxCollider2D>();
-        canvas = GetComponentInParent<Canvas>();
-    }
 
+        canvas = GetComponentInParent<Canvas>();
+        EnlargeHeightValue.widthCellXYSizeEvent += SetXandY;
+        EnlargeHeightValue.GetActivateEvent();
+        
+    }
+    
     void Update()
     {
         if (!_canStretch) return;
@@ -36,7 +42,7 @@ public class StretchToMouse : MonoBehaviour
         _image.enabled = true;
     }
 
-    public void EndStretch(int _intToMultiply,bool correctWord)
+    public void EndStretch(int _intToMultiply,bool correctWord,bool _isVertival)
     {
         _canStretch = false;
         if (!correctWord)
@@ -45,8 +51,13 @@ public class StretchToMouse : MonoBehaviour
             rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, 87f);
             return;
         }
-        
-        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x,(_intToMultiply+1) * 95f);
+        if (_isVertival)
+        {
+            rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, (_intToMultiply + 1) * enlargeXValue);
+            return;
+        }
+        rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, (_intToMultiply + 1) * enlargeYValue);
+
     }
 
     private void StretchToCurrentMousePosition()
@@ -60,6 +71,12 @@ public class StretchToMouse : MonoBehaviour
         if (distance < 87) return;
         rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, distance);
 
+    }
+    private void SetXandY(float _x, float _y)
+    {
+        enlargeXValue = _x;
+        enlargeYValue = _y;
+        EnlargeHeightValue.widthCellXYSizeEvent -= SetXandY;
     }
 
 

@@ -13,3 +13,14 @@ MonoBehaviour:
   m_Name: ClickController
   m_EditorClassIdentifier: 
   waitForEndbutton: 0
+  Words_Controller: {fileID: 0}
+  clonedList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  _particleSystem: {fileID: 0}
+  _gameObjectOfParticleSystem: {fileID: 147324, guid: c51e34914bd18ff4880b11005334182e, type: 3}

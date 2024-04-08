@@ -14,11 +14,15 @@ public class onClick_scriptableObject : ScriptableObject
     public void ChangeWaitForEndButtonToFalse() { waitForEndbutton = false; }
     [SerializeField] Words_Controller Words_Controller;
     [SerializeField] List<GameObject> clonedList;
+    [SerializeField] ParticleSystem _particleSystem;
+    [SerializeField] GameObject _gameObjectOfParticleSystem;
+    [SerializeField] GameObject _star;
 
     public void Initialize(Words_Controller wordsController)
     {
         this.Words_Controller = wordsController;
         Words_Controller.findWordPosition += MoveTo;
+        instantiateParticleSystem();
     }
     private void OnDisable()
     {
@@ -82,6 +86,8 @@ public class onClick_scriptableObject : ScriptableObject
     private void MoveTo(Vector3 worldPosition)
     {
         DuplicateListItems();
+        _star.transform.position = worldPosition;
+        
         int completedAnimations = 0; // Variable para llevar la cuenta de las animaciones completadas
 
         foreach (GameObject gameObject in clonedList)
@@ -94,14 +100,22 @@ public class onClick_scriptableObject : ScriptableObject
                 // Si todas las animaciones han terminado, ejecuta BounceAnimation
                 if (completedAnimations == clonedList.Count)
                 {
+                    
                     BounceAnimation();
+                    
                 }
             });
         }
 
 
     }
+    private void instantiateParticleSystem()
+    {
+        _star = GameObject.Instantiate(_gameObjectOfParticleSystem);
+        _particleSystem = _star.GetComponent<ParticleSystem>();
 
+        
+    }
     private void RestartClonedList()
     {
         clonedList.Clear();
@@ -114,7 +128,10 @@ public class onClick_scriptableObject : ScriptableObject
         .setEase(LeanTweenType.easeOutBack) // Efecto de rebote
         .setOnComplete(() =>
         {
-            LeanTween.scale(_gameObject, Vector3.one, 0.12f);
+            LeanTween.scale(_gameObject, Vector3.one, 0.12f).setOnComplete(() => {
+
+                _particleSystem.Play();
+            });
             _gameObject.GetComponent<TextMeshProUGUI>().color = Words_Controller.GetColorAtFinish();
         });
     }
