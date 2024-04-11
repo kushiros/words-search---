@@ -1,9 +1,11 @@
+using SRC;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 [CreateAssetMenu]
 public class WordSelection : ScriptableObject
 {
@@ -12,9 +14,11 @@ public class WordSelection : ScriptableObject
     private CellPosition startCell, endCell;
     private string CurrentWord = "";
     [SerializeField] WordsearchGrid_ScriptableObject _gridScriptableObject;
-    
+    [SerializeField] protected UnityEvent OnGoodMergeForChangeIterarion;
+    [SerializeField] bool isSecondIterationActive = false;
 
-    
+
+
 
     public void SetStartPoint(CellPosition point)
     {
@@ -94,6 +98,8 @@ public class WordSelection : ScriptableObject
         if (_gridScriptableObject.CheckWordsListWithWordObtained(CurrentWord))
         {
             _toReturn = true;
+            if(!isSecondIterationActive) return _toReturn;
+
             
         }
 
@@ -125,8 +131,14 @@ public class WordSelection : ScriptableObject
         {
 
             _toReturn= true;
+            if (!isSecondIterationActive) return _toReturn;
         }
         return _toReturn;
+
+    }
+
+    public void changeToNextGrid()
+    {
 
     }
 

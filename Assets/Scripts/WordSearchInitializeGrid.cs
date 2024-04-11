@@ -4,6 +4,8 @@ using System.Drawing;
 using TMPro;
 using UnityEngine;
 
+using Color = UnityEngine.Color;
+
 public class WordSearchInitializeGrid : MonoBehaviour
 {
     private CellPosition[][] grid;
@@ -73,22 +75,28 @@ public class WordSearchInitializeGrid : MonoBehaviour
         }
         _gridScriptableObject.SetGrid(grid);
     }
- private void PlaceWords()
+    private void PlaceWords()
     {
-        foreach (string word in words)
+        for (int i = 0; i < words.Count; i++)
         {
             bool placed = false;
             while (!placed)
             {
                 int row = random.Next(rows);
                 int col = random.Next(cols);
-                int direction = random.Next(4); // 0: horizontal, 1: vertical
+                int direction = random.Next(4); // 0: horizontal, 1: vertical, 2: vertical hacia arriba, 3: horizontal hacia la izquierda
 
-                if (CanPlaceWord(word, row, col, direction))
+                if (CanPlaceWord(words[i], row, col, direction))
                 {
-                    PlaceWord(word, row, col, direction);
+                    PlaceWord(words[i], row, col, direction);
                     placed = true;
                 }
+            }
+
+            // Llama a ModifyPreviousWords cada dos palabras
+            if ((i + 1) % 2 == 0)
+            {
+                ModifyPreviousWords();
             }
         }
     }
@@ -136,9 +144,14 @@ public class WordSearchInitializeGrid : MonoBehaviour
 
     private void PlaceWord(string word, int row, int col, int direction)
     {
+        CellPosition firstCell = null;
+        CellPosition lastCell = null;
+
         switch (direction)
         {
             case 0: // Horizontal hacia la derecha
+                firstCell = grid[row][col];
+                lastCell = grid[row][col + word.Length - 1];
                 for (int i = 0; i < word.Length; i++)
                 {
                     grid[row][col + i].SetLetter(word[i]);
@@ -146,6 +159,8 @@ public class WordSearchInitializeGrid : MonoBehaviour
                 }
                 break;
             case 1: // Vertical hacia abajo
+                firstCell = grid[row][col];
+                lastCell = grid[row + word.Length - 1][col];
                 for (int i = 0; i < word.Length; i++)
                 {
                     grid[row + i][col].SetLetter(word[i]);
@@ -153,6 +168,8 @@ public class WordSearchInitializeGrid : MonoBehaviour
                 }
                 break;
             case 2: // Vertical hacia arriba
+                firstCell = grid[row][col];
+                lastCell = grid[row - word.Length + 1][col];
                 for (int i = 0; i < word.Length; i++)
                 {
                     grid[row - i][col].SetLetter(word[i]);
@@ -160,6 +177,8 @@ public class WordSearchInitializeGrid : MonoBehaviour
                 }
                 break;
             case 3: // Horizontal hacia la izquierda
+                firstCell = grid[row][col];
+                lastCell = grid[row][col - word.Length + 1];
                 for (int i = 0; i < word.Length; i++)
                 {
                     grid[row][col - i].SetLetter(word[i]);
@@ -167,8 +186,43 @@ public class WordSearchInitializeGrid : MonoBehaviour
                 }
                 break;
         }
+
+        if (firstCell != null && lastCell != null)
+        {
+            _gridScriptableObject.SetFirstCellOfTheWord(firstCell);
+            _gridScriptableObject.SetLastCellOfTheWord(lastCell);
+        }
     }
 
+    private void ModifyPreviousWords()
+    {
+        int wordCount = _gridScriptableObject.GetWordsList().Count;
+        if (wordCount >= 3)
+        {
+            CellPosition firstCellOfLastWord = _gridScriptableObject.GetFirstCellOfWord(wordCount - 1);
+            CellPosition lastCellOfSecondLastWord = _gridScriptableObject.GetLastCellOfWord(wordCount - 2);
+            string newWord = _gridScriptableObject.GetWordsList()[wordCount - 1];
+
+
+            CellPosition affectedWordCell = (wordCount % 2 == 0) ? lastCellOfSecondLastWord : firstCellOfLastWord;
+
+
+            int intersectRow = affectedWordCell.GetPositionY();
+            int intersectCol = affectedWordCell.GetPositionX();
+
+
+            for (int i = 0; i < newWord.Length; i++)
+            {
+                int col = intersectCol + i;
+
+                if (col >= 0 && col < grid[0].Length)
+                {
+                    grid[intersectRow][col].GetcharController().SetChar(newWord[i]);
+                    grid[intersectRow][col].SetColor(UnityEngine.Color.blue); 
+                }
+            }
+        }
+    }
 
     private void FillRandomLetters()
     {

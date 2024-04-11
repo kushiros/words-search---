@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -16,6 +17,8 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     [SerializeField]onClick_scriptableObject onClick;
     [SerializeField] Actual2CellsContainer_ScriptableObject act;
     [SerializeField] private RotateToTheMouse _rotateToTheMouse;
+
+    [SerializeField] protected UnityEvent onMerge;
 
     void Start()
     {

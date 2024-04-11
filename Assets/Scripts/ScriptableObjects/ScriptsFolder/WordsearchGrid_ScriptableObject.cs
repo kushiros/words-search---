@@ -10,6 +10,8 @@ public class WordsearchGrid_ScriptableObject : ScriptableObject
     [SerializeField] CellPosition[][] grid;
     [SerializeField] private List<string> words;
     public event Action<string> OnWordFound;
+    [SerializeField] List<CellPosition> _firstCellOfTheWords;
+    [SerializeField] List<CellPosition> _lastCellOfTheWords;
     
 
     public void SetGrid(CellPosition[][] _grid)
@@ -58,5 +60,31 @@ public class WordsearchGrid_ScriptableObject : ScriptableObject
             }
         }
     }
-    
+    public void SetFirstCellOfTheWord(CellPosition _cellPosition)
+    {
+        _firstCellOfTheWords.Add(_cellPosition);
+    }
+    public void SetLastCellOfTheWord(CellPosition _cellPosition)
+    {
+        _lastCellOfTheWords.Add(_cellPosition);
+    }
+    public CellPosition GetFirstCellOfWord(int index)
+    {
+        if (index >= 0 && index < _firstCellOfTheWords.Count)
+        {
+            return _firstCellOfTheWords[index];
+        }
+        return null;
+    }
+
+    public CellPosition GetLastCellOfWord(int index)
+    {
+        if (index >= 0 && index < _lastCellOfTheWords.Count)
+        {
+            return _lastCellOfTheWords[index];
+        }
+        return null;
+    }
+
+
 }
