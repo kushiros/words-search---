@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
@@ -9,23 +10,33 @@ using Color = UnityEngine.Color;
 public class WordSearchInitializeGrid : MonoBehaviour
 {
     private CellPosition[][] grid;
-    [SerializeField] private List<string> words = new List<string> { "apple", "banana", "cherry" };
+    [SerializeField] protected List<string> words = new List<string> { "apple", "banana", "cherry" };
+    [SerializeField] private int lastWordModifiedIndex = -1;
     private List<string> selectedWords;
     [SerializeField] PanelSize_ScriptableObject panelSize;
     int rows = 10;
     int cols = 10;
     private System.Random random = new System.Random();
-
+    private bool isFirstTimeInThisPair = false;
+    [SerializeField] wordsContainers[] actualWordsList;
     public GameObject cellPrefab;
-
-    private WordSelection currentSelection;
+    [SerializeField]private int actualword;
+    private int numberofActualPair;
+    
     [SerializeField] WordsearchGrid_ScriptableObject _gridScriptableObject;
     // Start is called before the first frame update
     void Start()
     {
+        actualword = 0;
+        numberofActualPair = 0;
+        foreach (wordsContainers word in actualWordsList)
+        {
+            word.Reset();
+        }
         RectTransform rectTransform = GetComponent<RectTransform>();
         if (rectTransform != null)
         {
+            _gridScriptableObject.ResetWordsList();
             panelSize.SetGridSize((int)rectTransform.rect.width, (int)rectTransform.rect.height);
             cols = panelSize.GetColumnAmount();
             rows = panelSize.GetRowsAmount();
@@ -37,7 +48,7 @@ public class WordSearchInitializeGrid : MonoBehaviour
             return;
         }*/
         InitializeGrid();
-        _gridScriptableObject.SetList(words);
+        //_gridScriptableObject.SetList(words);
         PlaceWords();
         FillRandomLetters();
         
@@ -79,30 +90,39 @@ public class WordSearchInitializeGrid : MonoBehaviour
     {
         for (int i = 0; i < words.Count; i++)
         {
-            bool placed = false;
-            while (!placed)
+            if (i < 2)
             {
-                int row = random.Next(rows);
-                int col = random.Next(cols);
-                int direction = random.Next(4); // 0: horizontal, 1: vertical, 2: vertical hacia arriba, 3: horizontal hacia la izquierda
-
-                if (CanPlaceWord(words[i], row, col, direction))
+                bool placed = false;
+                while (!placed)
                 {
-                    PlaceWord(words[i], row, col, direction);
-                    placed = true;
+                    int row = random.Next(rows);
+                    int col = random.Next(cols);
+                    int direction = random.Next(2); // 0: horizontal, 1: vertical, 2: vertical hacia arriba, 3: horizontal hacia la izquierda
+
+                    if (CanPlaceWord(words[i], row, col, direction))
+                    {
+                        PlaceWord(words[i], row, col, direction);
+                        placed = true;
+                    }
                 }
             }
-
-            // Llama a ModifyPreviousWords cada dos palabras
-            if ((i + 1) % 2 == 0)
+            else if(i<12)
             {
-                ModifyPreviousWords();
+                ModifyPreviousWords(i);
             }
+
+            
+            
         }
     }
-    private bool CanPlaceWord(string word, int row, int col, int direction)
+
+    private bool CanPlaceWord(string word, int row, int col, int direction, int startRow = -1, int startCol = -1)
     {
-        switch(direction){
+        int r = (startRow == -1) ? row : startRow;
+        int c = (startCol == -1) ? col : startCol;
+
+        switch (direction)
+        {
             case 0:
                 if (col + word.Length > cols) return false;
                 for (int i = 0; i < word.Length; i++)
@@ -112,22 +132,7 @@ public class WordSearchInitializeGrid : MonoBehaviour
                 }
                 break;
             case 1:
-                if (row + word.Length > rows) return false;
-                for (int i = 0; i < word.Length; i++)
-                {
-                    if (grid[row + i][col].GetLetter() != '\0' && grid[row + i][col].GetLetter() != word[i])
-                        return false;
-                }
-                break;
-            case 2: // Vertical hacia arriba
-                if (row - word.Length < 0) return false;
-                for (int i = 0; i < word.Length; i++)
-                {
-                    if (grid[row - i][col].GetLetter() != '\0' && grid[row - i][col].GetLetter() != word[i])
-                        return false;
-                }
-                break;
-            case 3: // Horizontal hacia la izquierda
+             // Horizontal hacia la izquierda
                 if (col - word.Length < 0) return false;
                 for (int i = 0; i < word.Length; i++)
                 {
@@ -141,6 +146,28 @@ public class WordSearchInitializeGrid : MonoBehaviour
 
         return true;
     }
+    private bool CanFitWordInGrid(string word, int row, int col, int direction)
+    {
+        switch (direction)
+        {
+            case 0: // Horizontal hacia la derecha
+                if (col + word.Length > cols) return false;
+                break;
+            case 1: // Vertical hacia abajo
+                if (col - word.Length + 1 < 0) return false;
+                break;
+
+            case 2: // Vertical hacia arriba
+                if (row - word.Length + 1 < 0) return false;
+                break;
+            case 3: // Horizontal hacia la izquierda
+                if (row + word.Length > rows) return false;
+                break;
+        }
+
+        return true;
+    }
+
 
     private void PlaceWord(string word, int row, int col, int direction)
     {
@@ -155,34 +182,17 @@ public class WordSearchInitializeGrid : MonoBehaviour
                 for (int i = 0; i < word.Length; i++)
                 {
                     grid[row][col + i].SetLetter(word[i]);
-                    grid[row][col + i].SetColor(UnityEngine.Color.red);
+                    grid[row][col + i].SetColor(Color.red);
                 }
                 break;
             case 1: // Vertical hacia abajo
-                firstCell = grid[row][col];
-                lastCell = grid[row + word.Length - 1][col];
-                for (int i = 0; i < word.Length; i++)
-                {
-                    grid[row + i][col].SetLetter(word[i]);
-                    grid[row + i][col].SetColor(UnityEngine.Color.red);
-                }
-                break;
-            case 2: // Vertical hacia arriba
-                firstCell = grid[row][col];
-                lastCell = grid[row - word.Length + 1][col];
-                for (int i = 0; i < word.Length; i++)
-                {
-                    grid[row - i][col].SetLetter(word[i]);
-                    grid[row - i][col].SetColor(UnityEngine.Color.red);
-                }
-                break;
-            case 3: // Horizontal hacia la izquierda
+
                 firstCell = grid[row][col];
                 lastCell = grid[row][col - word.Length + 1];
                 for (int i = 0; i < word.Length; i++)
                 {
                     grid[row][col - i].SetLetter(word[i]);
-                    grid[row][col - i].SetColor(UnityEngine.Color.red);
+                    grid[row][col - i].SetColor(Color.red);
                 }
                 break;
         }
@@ -191,39 +201,142 @@ public class WordSearchInitializeGrid : MonoBehaviour
         {
             _gridScriptableObject.SetFirstCellOfTheWord(firstCell);
             _gridScriptableObject.SetLastCellOfTheWord(lastCell);
-        }
-    }
-
-    private void ModifyPreviousWords()
-    {
-        int wordCount = _gridScriptableObject.GetWordsList().Count;
-        if (wordCount >= 3)
-        {
-            CellPosition firstCellOfLastWord = _gridScriptableObject.GetFirstCellOfWord(wordCount - 1);
-            CellPosition lastCellOfSecondLastWord = _gridScriptableObject.GetLastCellOfWord(wordCount - 2);
-            string newWord = _gridScriptableObject.GetWordsList()[wordCount - 1];
-
-
-            CellPosition affectedWordCell = (wordCount % 2 == 0) ? lastCellOfSecondLastWord : firstCellOfLastWord;
-
-
-            int intersectRow = affectedWordCell.GetPositionY();
-            int intersectCol = affectedWordCell.GetPositionX();
-
-
-            for (int i = 0; i < newWord.Length; i++)
+            if (!_gridScriptableObject.GetWordsList().Contains(word))
             {
-                int col = intersectCol + i;
+                _gridScriptableObject.AddWordToList(word);
 
-                if (col >= 0 && col < grid[0].Length)
-                {
-                    grid[intersectRow][col].GetcharController().SetChar(newWord[i]);
-                    grid[intersectRow][col].SetColor(UnityEngine.Color.blue); 
-                }
+                actualWordsList[actualword].SetwordsContainers(word,firstCell,lastCell,actualword);
+                actualword++;
             }
         }
     }
 
+    private void ModifyPreviousWords(int index)
+    {
+        if (index >= 2)
+        {
+            string newWord = words[index];
+
+            // Alterna entre modificar la primera y la segunda palabra del par anterior.
+            int wordToModifyIndex = index - 2 ;
+            lastWordModifiedIndex = wordToModifyIndex;
+
+            int firstCellX= actualWordsList[wordToModifyIndex].GetFirstCellPositionY();
+            int firstCellY = actualWordsList[wordToModifyIndex].GetFirstCellPositionX();
+            int lastCellX = actualWordsList[wordToModifyIndex].GetLastCellPositionY();
+            int lastCellY = actualWordsList[wordToModifyIndex ].GetLastCellPositionX();
+
+
+            // Alterna entre horizontal (0) y vertical (1) cada dos palabras
+            int direction = numberofActualPair % 2;
+
+            // Encuentra los extremos del rango en el que podemos insertar la palabra
+            int minX, minY, maxX, maxY;
+            if (firstCellX < lastCellX)
+            {
+                minX = firstCellX;
+                maxX = lastCellX;
+            }
+            else
+            { 
+                
+                minX = lastCellX;
+                maxX = firstCellX;
+            }
+
+            if(firstCellY <lastCellY)
+            {
+                minY = firstCellY;
+                maxY = lastCellY;
+
+            }
+            else
+            {
+                minY=lastCellY;
+                maxY= firstCellY;
+            }
+
+            int randomX = random.Next(minX, maxX);
+            int randomY = random.Next(minY, maxY);
+
+            bool entraaca = false;
+
+            if(direction == 0)
+            {
+                while((randomY + newWord.Length) > 9)
+                {
+                    randomY--;
+                }
+                for (int i = 0; i < newWord.Length; i++)
+                {
+
+                    CellPosition currentCell = grid[randomX][randomY+i];
+                    currentCell.GetcharController().SetChar(newWord[i]);
+                    currentCell.SetColor(Color.red);
+
+                    // Establece la primera y la última celda de la palabra
+                    if (i == 0)
+                    {
+                        firstCellX = randomX;
+                        firstCellY = randomY + i;
+                    }
+                    if (i == newWord.Length - 1)
+                    {
+                        lastCellX = randomX;
+                        lastCellY = randomY + i;
+                    }
+                }
+            }
+
+            if (direction == 1)
+            {
+                while (randomX + newWord.Length > 9)
+                {
+                    randomX--;
+                }
+                for (int i = 0; i < newWord.Length; i++)
+                {
+
+                    CellPosition currentCell = grid[randomX+i][randomY];
+                    currentCell.GetcharController().SetChar(newWord[i]);
+                    currentCell.SetColor(Color.blue);
+
+                    // Establece la primera y la última celda de la palabra
+                    if (i == 0)
+                    {
+                        firstCellX = randomX + i;
+                        firstCellY = randomY;
+                    }
+                    if (i == newWord.Length - 1)
+                    {
+                        lastCellX = randomX + i;
+                        lastCellY = randomY;
+                    }
+                }
+            }
+
+            if (index % 2 != 0)
+            {
+                numberofActualPair++;
+            }
+
+            _gridScriptableObject.AddWordToList(newWord);
+
+
+            SetWordsContainersInfo(newWord,firstCellX, firstCellY, lastCellX, lastCellY,index,(index-2));
+            actualword++;
+        }
+    }
+    private void SetWordsContainersInfo(string word,int firstCellX, int firstCellY, int lastCellX, int lastCellY,int index,int wordIRemplaced)
+    {
+        actualWordsList[actualword].SetFirstCellPositionX(firstCellX);
+        actualWordsList[actualword].SetFirstCellPositionY(firstCellY);
+        actualWordsList[actualword].SetLastCellPositionX(lastCellX);
+        actualWordsList[actualword].SetLastCellPositionY(lastCellY);
+        actualWordsList[actualword].SetString(word);
+        actualWordsList[actualword].SetIndex(index);
+        actualWordsList[actualword].SetWordIRemplaced(actualWordsList[wordIRemplaced]);
+    }
     private void FillRandomLetters()
     {
         for (int i = 0; i < rows; i++)

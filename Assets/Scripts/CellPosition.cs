@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -40,6 +41,10 @@ public class CellPosition : MonoBehaviour, IPointerEnterHandler
     public void SetLetter(char letter)
     {
         charController.SetChar(letter);
+    }
+    public void SetRandomLetter()
+    {
+       // char _char = (char)('A' + System.Random.Next(26));
     }
 
     public void SetColor(Color color)

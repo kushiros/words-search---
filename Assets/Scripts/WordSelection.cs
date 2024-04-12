@@ -98,7 +98,8 @@ public class WordSelection : ScriptableObject
         if (_gridScriptableObject.CheckWordsListWithWordObtained(CurrentWord))
         {
             _toReturn = true;
-            if(!isSecondIterationActive) return _toReturn;
+            _gridScriptableObject.SearchWordIRemplaced(CurrentWord);
+            if (!isSecondIterationActive) return _toReturn;
 
             
         }
@@ -131,6 +132,7 @@ public class WordSelection : ScriptableObject
         {
 
             _toReturn= true;
+            _gridScriptableObject.SearchWordIRemplaced(CurrentWord);
             if (!isSecondIterationActive) return _toReturn;
         }
         return _toReturn;
